@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TQ - HSKK</title>
+    <script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="css/style.css">
+</head>
+<body class="text-gray-800 relative bg-[#F8F9F8]">
+    <header class="sticky top-0 z-40 bg-[#F8F9F8] border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 cursor-pointer">
+                <div class="w-10 h-10 rounded-full border border-gray-400 flex items-center justify-center text-xl font-serif text-black">文</div>
+                <div><h1 class="font-bold text-lg leading-tight text-black">TQ</h1><p class="text-[10px] text-gray-500">mỗi ngày một chút</p></div>
+            </a>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
+                <a href="index.html" class="nav-item  hover:text-black transition-colors">Trang chủ</a>
+                <a href="paths.html" class="nav-item  hover:text-black transition-colors">Lộ trình học</a>
+                <a href="videos.html" class="nav-item  hover:text-black transition-colors">Khóa học Video</a>
+                <a href="hskk.html" class="nav-item active hover:text-black transition-colors">Luyện HSKK</a>
+                <a href="tutor.html" class="nav-item  hover:text-black transition-colors">Gia sư 1:1</a>
+            </nav>
+            <div class="flex items-center gap-2">
+                <div id="auth-container" class="relative"></div>
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-gray-600 hover:text-black focus:outline-none ml-1">☰</button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden absolute top-20 left-0 w-full bg-white border-b border-gray-200 shadow-lg z-40">
+            <div class="flex flex-col px-4 py-4 space-y-1 text-base font-medium">
+                <a href="index.html" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">Trang chủ</a>
+                <a href="paths.html" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">Lộ trình học</a>
+                <a href="videos.html" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">Khóa học Video</a>
+                <a href="hskk.html" class="block px-4 py-3 font-bold text-black bg-gray-50 rounded-lg">Luyện HSKK</a>
+                <a href="tutor.html" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">Gia sư 1:1</a>
+            </div>
+        </div>
+    </header>
+    
+    
+    <main class="max-w-6xl mx-auto px-4 py-12 fade-in-up">
+        <h2 class="text-3xl md:text-4xl font-bold text-[#1B2A24] mb-8">Luyện nói HSKK & Dịch thuật</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-[#E8F3EE] rounded-3xl p-6 text-center shadow-sm relative">
+                <div class="absolute top-4 right-4 cursor-pointer text-gray-500 hover:text-black font-medium" onclick="nextHskk()">🔄 Chuyển câu</div>
+                <h3 class="text-4xl md:text-5xl font-serif mb-2 mt-4" id="target-phrase">你好中国</h3>
+                <p class="text-lg text-[#F05123] font-medium" id="target-pinyin">Nǐ hǎo zhōngguó</p>
+                <p class="text-sm text-gray-500 mb-8" id="target-vi">Xin chào Trung Quốc</p>
+                <div class="relative inline-block mb-4">
+                    <div id="record-dot" class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full transition-all"></div>
+                    <button id="btn-speak" onclick="startSpeaking()" class="bg-[#1B2A24] text-white px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-black transition-colors z-10 relative shadow-md">
+                        <span>🎙️</span> <span id="btn-speak-text">BẤM ĐỂ NÓI</span>
+                    </button>
+                </div>
+                <div id="speech-result" class="hidden mt-4 p-4 bg-white rounded-xl border border-green-200">
+                    <p class="text-xs text-gray-500 mb-1">Bạn vừa nói:</p>
+                    <p id="user-spoken-text" class="text-lg font-medium text-black"></p>
+                    <p id="feedback-msg" class="text-sm mt-2 font-bold"></p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm flex flex-col h-full">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-lg">Dịch thuật TQ</h3>
+                    <div class="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
+                        <span id="lang-from" class="text-sm font-medium px-3 py-1 bg-white rounded shadow-sm">Việt</span>
+                        <button onclick="swapLanguage()" class="text-gray-500 hover:text-black px-2 font-bold">⇄</button>
+                        <span id="lang-to" class="text-sm font-medium px-3 py-1">Trung</span>
+                    </div>
+                </div>
+                <div class="relative mb-4">
+                    <textarea id="trans-input" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm focus:outline-none focus:border-[#F05123] resize-none" placeholder="Nhập văn bản cần dịch..."></textarea>
+                    <button onclick="clearText()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 font-bold">✕</button>
+                </div>
+                <button onclick="doTranslate()" class="w-full bg-[#F05123] text-white py-3 rounded-xl font-bold hover:bg-[#d8481e] transition-colors mb-4 shadow-sm">Dịch ngay</button>
+                <div class="relative flex-1 flex flex-col">
+                    <textarea id="trans-output" rows="3" class="w-full flex-1 bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm focus:outline-none resize-none" readonly placeholder="Bản dịch sẽ hiển thị ở đây..."></textarea>
+                    <p id="trans-pinyin" class="text-[#F05123] text-xs font-medium mt-2 absolute bottom-4 left-4"></p>
+                    <div class="absolute top-3 right-3 flex gap-2">
+                        <button onclick="copyTranslation()" class="text-gray-400 hover:text-black" title="Sao chép">📋</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+    
+    <footer class="border-t border-gray-200 mt-16 bg-white pt-12 pb-8 fade-in-up delay-100">
+        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-8 rounded-full border border-gray-400 flex items-center justify-center text-sm font-serif text-black">文</div>
+                    <span class="font-bold text-lg text-black">TQ</span>
+                </div>
+                <p class="text-sm text-gray-500 mb-4">Nền tảng học tiếng Trung trực quan, tối ưu và thực tế. Học để kết nối với thế giới.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-black mb-4">Thông tin liên hệ</h4>
+                <ul class="space-y-2 text-sm text-gray-500">
+                    <li>👨‍🏫 Sáng lập / Gia sư: Lê Đức Thắng</li>
+                    <li>📍 Địa chỉ: Quảng Ninh, Việt Nam</li>
+                    <li>✉️ Email: nguyenduykhanh200339@gmail.com</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-black mb-4">Khám phá</h4>
+                <ul class="space-y-2 text-sm text-gray-500">
+                    <li><a href="paths.html" class="hover:text-[#F05123] transition-colors">Lộ trình học HSK 1-5</a></li>
+                    <li><a href="videos.html" class="hover:text-[#F05123] transition-colors">Khóa học Video</a></li>
+                    <li><a href="hskk.html" class="hover:text-[#F05123] transition-colors">Luyện thi HSKK & Dịch thuật</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-6xl mx-auto px-4 border-t border-gray-100 pt-8 text-center text-xs text-gray-400">
+            © 2026 TQ. Bản quyền thuộc về Lê Đức Thắng.
+        </div>
+    </footer>
+    
+    
+    <!-- Modal Đăng nhập (giữ nguyên logic) -->
+    <div id="loginModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div class="bg-[#1C1D1F] p-6 md:p-8 rounded-2xl w-full max-w-md shadow-2xl relative border border-gray-800 modal-content text-white">
+            <button onclick="closeModal('loginModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">✕</button>
+            <div id="loginOptionsView">
+                <div class="flex justify-center mb-4"><div class="w-12 h-12 bg-[#F05123] rounded-xl flex items-center justify-center text-white font-bold text-xl">TQ</div></div>
+                <h3 class="text-2xl font-bold text-center text-white mb-2">Đăng nhập vào TQ</h3>
+                <div class="space-y-3 mt-6">
+                    <button onclick="openGoogleOAuth()" class="w-full flex items-center justify-center gap-3 border border-gray-600 rounded-full py-3 hover:bg-gray-800 transition-colors"><span class="text-sm font-medium text-gray-200">Tiếp tục với Google</span></button>
+                    <button onclick="showEmailLogin()" class="w-full flex items-center justify-center gap-3 border border-gray-600 rounded-full py-3 hover:bg-gray-800 transition-colors"><span class="text-sm font-medium text-gray-200">Sử dụng email</span></button>
+                </div>
+                <div class="mt-6 text-center text-sm"><p class="text-gray-400">Bạn chưa có tài khoản? <button onclick="switchToRegister()" class="text-[#F05123] font-semibold hover:underline">Đăng ký</button></p></div>
+            </div>
+            <div id="emailLoginView" class="hidden">
+                 <button onclick="showLoginOptions()" class="absolute top-5 left-4 text-gray-400 hover:text-white flex items-center gap-1 text-sm font-medium">← Quay lại</button>
+                 <div class="flex justify-center mb-4 mt-8"><div class="w-12 h-12 bg-[#F05123] rounded-xl flex items-center justify-center text-white font-bold text-xl">TQ</div></div>
+                 <h3 class="text-2xl font-bold text-center text-white mb-6">Đăng nhập với Email</h3>
+                 <input type="email" id="loginEmail" placeholder="Email của bạn" class="w-full bg-transparent border border-gray-600 text-white rounded-lg px-4 py-3 text-sm mb-4 focus:outline-none focus:border-[#F05123] transition-colors">
+                 <input type="password" id="loginPassword" placeholder="Mật khẩu" class="w-full bg-transparent border border-gray-600 text-white rounded-lg px-4 py-3 text-sm mb-6 focus:outline-none focus:border-[#F05123] transition-colors">
+                 <button onclick="doLogin()" class="w-full bg-[#F05123] text-white rounded-full py-3 font-medium hover:bg-[#d8481e] transition-colors mb-3">Đăng nhập</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- POPUP ĐĂNG KÝ -->
+    <div id="registerModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div class="bg-[#1C1D1F] p-6 md:p-8 rounded-2xl w-full max-w-md shadow-2xl relative border border-gray-800 modal-content text-white">
+            <button onclick="closeModal('registerModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">✕</button>
+            <div class="flex justify-center mb-4"><div class="w-12 h-12 bg-[#F05123] rounded-xl flex items-center justify-center text-white font-bold text-xl">TQ</div></div>
+            <h3 class="text-2xl font-bold text-center text-white mb-6">Tạo tài khoản TQ</h3>
+            <input type="text" id="regName" placeholder="Họ và tên" class="w-full bg-transparent border border-gray-600 text-white rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-[#F05123] transition-colors">
+            <input type="email" id="regEmail" placeholder="Email của bạn" class="w-full bg-transparent border border-gray-600 text-white rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-[#F05123] transition-colors">
+            <input type="password" id="regPassword" placeholder="Mật khẩu" class="w-full bg-transparent border border-gray-600 text-white rounded-lg px-4 py-3 text-sm mb-6 focus:outline-none focus:border-[#F05123] transition-colors">
+            <button onclick="doRegister()" class="w-full bg-[#F05123] text-white rounded-full py-3 font-medium hover:bg-[#d8481e] transition-colors mb-3">Đăng ký</button>
+            <div class="text-center text-sm"><span class="text-gray-400">Đã có tài khoản?</span> <button onclick="switchToLogin()" class="font-semibold text-[#F05123] hover:underline">Đăng nhập</button></div>
+        </div>
+    </div>
+
+    <!-- POPUP CHỌN TÀI KHOẢN GOOGLE -->
+    <div id="googleOAuthModal" class="hidden fixed inset-0 z-[60] items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-sm shadow-2xl relative modal-content text-center">
+            <h3 class="text-xl font-medium text-gray-800 mb-4 mt-4">Chọn tài khoản Google</h3>
+            <button onclick="processGoogleLogin('Nguyễn Duy Khánh', 'khanhnd@gmail.com', 'https://lh3.googleusercontent.com/pw/AP1GczPIzXdjS6uU5Ze0hZiBPDh0dyDTh012yg_nmrjG3uwGpLHtfusqRm79kx8GdoKuALgD12_nIoEceHL0XhjOa4qTrjr1o2kxx8gchW2r9K-zC-JmzJzZQAS1TFFxbcTqS39AX_nF30XUx1FSPcweczj5ag=w1374-h914-s-no-gm?authuser=0')" class="w-full flex items-center gap-4 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 mb-2">
+                <img src="https://lh3.googleusercontent.com/pw/AP1GczPIzXdjS6uU5Ze0hZiBPDh0dyDTh012yg_nmrjG3uwGpLHtfusqRm79kx8GdoKuALgD12_nIoEceHL0XhjOa4qTrjr1o2kxx8gchW2r9K-zC-JmzJzZQAS1TFFxbcTqS39AX_nF30XUx1FSPcweczj5ag=w1374-h914-s-no-gm?authuser=0" class="w-10 h-10 rounded-full object-cover">
+                <div class="text-left"><p class="font-medium text-gray-900 text-sm">Nguyễn Duy Khánh</p><p class="text-xs text-gray-500">khanhnd@gmail.com</p></div>
+            </button>
+        </div>
+    </div>
+    
+    <!-- POPUP CÀI ĐẶT -->
+    <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-[#0B0C0F] flex-col md:flex-row modal-content">
+        <button onclick="closeModal('settingsModal')" class="absolute top-6 right-6 text-gray-400 hover:text-white text-3xl z-50">✕</button>
+        <div class="w-full md:w-1/4 bg-[#1C1D1F] border-r border-gray-800 h-full p-6 pt-12 md:pt-16">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-[#F05123] rounded-xl flex items-center justify-center text-white font-bold text-lg">TQ</div>
+                <div><h2 class="text-white font-bold text-xl">Cài đặt</h2></div>
+            </div>
+            <div class="space-y-1">
+                <button id="tab-btn-info" onclick="switchSettingTab('info')" class="setting-tab-btn w-full text-left px-4 py-3 bg-[#F05123] text-white rounded-lg font-medium text-sm mb-1 transition-colors">👤 Thông tin cá nhân</button>
+                <button id="tab-btn-pass" onclick="switchSettingTab('pass')" class="setting-tab-btn w-full text-left px-4 py-3 text-gray-400 opacity-60 hover:bg-gray-800 hover:text-white rounded-lg font-medium text-sm transition-colors">🛡 Mật khẩu & bảo mật</button>
+            </div>
+        </div>
+        <div class="flex-1 p-6 md:p-12 overflow-y-auto text-white relative">
+            <div id="setting-content-info" class="setting-content max-w-2xl">
+                <h2 class="text-2xl font-bold mb-6">Hồ sơ cá nhân</h2>
+                <div class="space-y-4">
+                    <div><label class="block text-gray-400 text-sm font-bold mb-1">Họ và tên</label><input type="text" id="set-fullname" class="w-full bg-[#1C1D1F] border border-gray-700 p-3 rounded-lg focus:border-[#F05123] focus:outline-none"></div>
+                    <div><label class="block text-gray-400 text-sm font-bold mb-1">Tên người dùng (@)</label><input type="text" id="set-username" class="w-full bg-[#1C1D1F] border border-gray-700 p-3 rounded-lg text-gray-500 cursor-not-allowed" disabled></div>
+                    <div><label class="block text-gray-400 text-sm font-bold mb-1">Giới thiệu bản thân</label><textarea id="set-bio" class="w-full bg-[#1C1D1F] border border-gray-700 p-3 rounded-lg focus:border-[#F05123] focus:outline-none resize-none" rows="3"></textarea></div>
+                    <button onclick="saveSettings()" class="bg-[#F05123] px-6 py-3 rounded-xl font-bold mt-2 hover:bg-[#d8481e] transition-colors">Lưu thông tin</button>
+                </div>
+            </div>
+            
+            <div id="setting-content-pass" class="setting-content max-w-2xl hidden">
+                <h2 class="text-2xl font-bold mb-6">Mật khẩu và bảo mật</h2>
+                <div class="space-y-4">
+                    <div><label class="block text-gray-400 text-sm font-bold mb-1">Mật khẩu cũ</label><input type="password" id="set-pass0" class="w-full bg-[#1C1D1F] border border-gray-700 p-3 rounded-lg focus:border-[#F05123] focus:outline-none"></div>
+                    <div><label class="block text-gray-400 text-sm font-bold mb-1">Mật khẩu mới</label><input type="password" id="set-pass1" class="w-full bg-[#1C1D1F] border border-gray-700 p-3 rounded-lg focus:border-[#F05123] focus:outline-none"></div>
+                    <div><label class="block text-gray-400 text-sm font-bold mb-1">Nhập lại mật khẩu mới</label><input type="password" id="set-pass2" class="w-full bg-[#1C1D1F] border border-gray-700 p-3 rounded-lg focus:border-[#F05123] focus:outline-none"></div>
+                    <button onclick="savePassword()" class="bg-[#F05123] px-6 py-3 rounded-xl font-bold mt-2 hover:bg-[#d8481e] transition-colors">Cập nhật mật khẩu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP KHÓA HỌC CỦA TÔI -->
+    <div id="myCoursesModal" class="hidden fixed inset-0 z-[80] items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div class="bg-white p-6 md:p-8 rounded-3xl w-full max-w-md shadow-2xl relative modal-content">
+            <button onclick="closeModal('myCoursesModal')" class="absolute top-4 right-4 text-gray-400 hover:text-black text-lg">✕</button>
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4"><span class="text-blue-500 text-2xl">📚</span></div>
+            <h3 class="text-2xl font-bold mb-6 text-[#1B2A24]">Khóa học của tôi</h3>
+            <div id="myCoursesList" class="max-h-80 overflow-y-auto custom-scrollbar pr-2">
+                <!-- Danh sách sinh ra từ JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- TẤT CẢ MODAL ĐẶT LỊCH GIA SƯ (TUTOR) -->
+    <!-- POPUP ĐẶT LỊCH GIA SƯ -->
+    <div id="bookTutorModal" class="hidden fixed inset-0 z-[60] items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div class="bg-white p-6 md:p-8 rounded-3xl w-full max-w-md shadow-2xl relative modal-content">
+            <button onclick="closeModal('bookTutorModal')" class="absolute top-4 right-4 text-gray-400 hover:text-black text-lg">✕</button>
+            <h3 class="text-2xl font-bold mb-2 text-[#1B2A24]">Đặt lịch Gia sư</h3>
+            <p class="text-sm text-gray-500 mb-4">Bạn đang đặt lịch với: <strong id="tutorNameDisplay" class="text-[#F05123] text-base"></strong></p>
+            <div class="space-y-4 mb-6">
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Chọn ngày học</label><input type="date" id="bookDate" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#F05123]"></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Chọn ca học</label>
+                    <select id="bookTime" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#F05123] bg-white">
+                        <option>Sáng (08:00 - 10:00)</option><option>Chiều (14:00 - 16:00)</option><option>Tối (19:30 - 21:30)</option>
+                    </select>
+                </div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Ghi chú cho Gia sư</label><textarea id="bookNote" rows="2" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#F05123] resize-none" placeholder="Trình độ hiện tại, mong muốn..."></textarea></div>
+            </div>
+            <button onclick="submitTutorBooking()" class="w-full bg-[#F05123] text-white rounded-xl py-3 font-bold hover:bg-[#d8481e] transition-colors btn-hover-effect shadow-md">Xác nhận đặt lịch</button>
+        </div>
+    </div>
+
+    <!-- POPUP THÔNG TIN LIÊN HỆ GIA SƯ -->
+    <div id="tutorContactModal" class="hidden fixed inset-0 z-[70] items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div class="bg-white p-6 md:p-8 rounded-3xl w-full max-w-md shadow-2xl relative modal-content text-center">
+            <button onclick="closeModal('tutorContactModal')" class="absolute top-4 right-4 text-gray-400 hover:text-black text-lg">✕</button>
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-green-500 text-3xl">✅</span></div>
+            <h3 class="text-2xl font-bold mb-2 text-[#1B2A24]">Đặt lịch thành công!</h3>
+            <p class="text-sm text-gray-500 mb-6">Lịch học của bạn đã được ghi nhận. Dưới đây là thông tin liên hệ của Gia sư để bạn tiện trao đổi:</p>
+            <div class="bg-gray-50 p-4 rounded-xl text-left border border-gray-200 mb-6 shadow-inner">
+                <p class="mb-2"><span class="text-gray-500 font-medium text-sm">Gia sư:</span> <strong id="contactTutorName" class="text-black ml-2"></strong></p>
+                <p class="mb-2"><span class="text-gray-500 font-medium text-sm">Zalo / SĐT:</span> <strong id="contactTutorPhone" class="text-[#F05123] ml-2"></strong></p>
+                <p><span class="text-gray-500 font-medium text-sm">Email:</span> <strong id="contactTutorEmail" class="text-black ml-2"></strong></p>
+            </div>
+            <button onclick="closeModal('tutorContactModal')" class="w-full bg-[#1B2A24] text-white rounded-xl py-3 font-bold hover:bg-black transition-colors">Đóng</button>
+        </div>
+    </div>
+
+    <!-- CÁC POPUP THANH TOÁN QR NHƯ BẢN TRƯỚC -->
+    <!-- Checkout -->
+    <div id="checkoutModal" class="hidden fixed inset-0 z-[60] items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div class="bg-white p-6 md:p-8 rounded-3xl w-full max-w-md shadow-2xl relative modal-content">
+            <button onclick="closeModal('checkoutModal')" class="absolute top-4 right-4 text-gray-400 hover:text-black text-lg">✕</button>
+            <h3 class="text-2xl font-bold mb-2 text-[#1B2A24]">Xác nhận đăng ký</h3>
+            <p class="text-sm text-gray-500 mb-4">Khóa học: <strong id="checkoutCourseName" class="text-black text-base"></strong></p>
+            <div id="studyTypeSelection" class="hidden mb-4">
+                <select id="studyTypeSelect" class="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-black"><option value="online">Học Online</option><option value="offline">Học Trực tiếp</option></select>
+            </div>
+            <div id="scheduleSelection" class="hidden mb-4 space-y-4">
+                <select id="checkoutSchedule" class="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-black"><option value="2-4-6">Thứ 2 - 4 - 6</option><option value="3-5-7">Thứ 3 - 5 - 7</option></select>
+                <select id="checkoutTime" class="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-black"><option value="18h-21h">18:00 - 21:00 (6h - 9h tối)</option></select>
+            </div>
+            <div class="border-t border-gray-200 pt-4 mb-6 mt-2"><div class="flex justify-between items-center font-bold text-lg"><span>Tổng thanh toán:</span><span id="checkoutPrice" class="text-green-700"></span></div></div>
+            <button onclick="processPayment()" class="w-full bg-[#F05123] text-white rounded-xl py-3 font-medium hover:bg-[#d8481e] transition-colors btn-hover-effect">Thanh toán ngay</button>
+        </div>
+    </div>
+    
+    <!-- QR -->
+    <div id="qrModal" class="hidden fixed inset-0 z-[70] items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div class="bg-white p-6 md:p-8 rounded-3xl w-full max-w-sm shadow-2xl relative modal-content text-center">
+            <button onclick="cancelPayment()" class="absolute top-4 right-4 text-gray-400 hover:text-black text-lg">✕</button>
+            <h3 class="text-2xl font-bold mb-2 text-[#1B2A24]">Quét mã QR</h3>
+            <p class="text-sm text-gray-500 mb-4">Sử dụng App ngân hàng bất kỳ để quét mã</p>
+            <div class="bg-gray-50 p-4 rounded-xl mb-6 border border-gray-200">
+                <img id="qrImage" src="" alt="QR Code" class="w-48 h-48 mx-auto object-contain mix-blend-multiply mb-4">
+                <div class="text-left text-sm space-y-2 border-t border-gray-200 pt-4">
+                    <p class="flex justify-between"><span class="text-gray-500">Ngân hàng:</span> <strong class="text-black">MB Bank</strong></p>
+                    <p class="flex justify-between"><span class="text-gray-500">Chủ tài khoản:</span> <strong class="text-black">LE DUC THANG</strong></p>
+                    <p class="flex justify-between"><span class="text-gray-500">Số tiền:</span> <strong id="qrAmount" class="text-[#F05123] font-bold text-lg"></strong></p>
+                    <p class="flex justify-between items-center mt-2"><span class="text-gray-500">Nội dung CK:</span> <strong id="qrContent" class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded"></strong></p>
+                </div>
+            </div>
+            <div id="paymentStatus" class="flex flex-col items-center justify-center text-sm font-medium text-blue-600 animate-pulse">
+                Đang chờ thanh toán... Hệ thống tự động xác nhận
+            </div>
+        </div>
+    </div>
+
+    <!-- Success -->
+    <div id="paymentSuccessModal" class="hidden fixed inset-0 z-[80] items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div class="bg-white p-6 md:p-8 rounded-3xl w-full max-w-md shadow-2xl relative modal-content text-center">
+            <button onclick="closeModal('paymentSuccessModal'); updateCourseButtons();" class="absolute top-4 right-4 text-gray-400 hover:text-black text-lg">✕</button>
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-green-500 text-3xl">✅</span></div>
+            <h3 class="text-2xl font-bold mb-2 text-[#1B2A24]">Thanh toán thành công!</h3>
+            <p class="text-gray-600 mb-6 text-sm">Cảm ơn bạn đã đăng ký <strong id="successCourseName" class="text-black"></strong></p>
+            <div class="text-left bg-green-50 p-5 rounded-xl border border-green-100 mb-6">
+                <h4 class="font-bold text-green-800 mb-3">Các bước tiếp theo dành cho bạn:</h4>
+                <ul id="nextStepsList" class="space-y-3 text-sm text-green-800 list-disc list-inside"></ul>
+            </div>
+            <button onclick="closeModal('paymentSuccessModal'); updateCourseButtons();" class="w-full bg-[#1B2A24] text-white rounded-xl py-3 font-bold hover:bg-black transition-colors">Đã hiểu & Bắt đầu học</button>
+        </div>
+    </div>
+    
+    <!-- POPUP THÔNG TIN LỚP OFFLINE -->
+    <div id="offlineInfoModal" class="hidden fixed inset-0 z-[60] items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div class="bg-white p-6 md:p-8 rounded-3xl w-full max-w-md shadow-2xl relative modal-content text-center">
+            <button onclick="closeModal('offlineInfoModal')" class="absolute top-4 right-4 text-gray-400 hover:text-black text-lg">✕</button>
+            <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-orange-500 text-3xl">📍</span></div>
+            <h3 class="text-2xl font-bold mb-2 text-[#1B2A24]">Thông tin lớp học</h3>
+            <h4 id="offlineCourseName" class="text-lg font-bold text-[#F05123] mb-4"></h4>
+            <div class="bg-gray-50 p-4 rounded-xl text-left border border-gray-200 mb-6 shadow-inner space-y-3">
+                <p><span class="text-gray-500 font-medium text-sm block">Mã số Học viên:</span> <strong id="offlineStudentId" class="text-black text-lg"></strong></p>
+                <p><span class="text-gray-500 font-medium text-sm block">Lịch học:</span> <strong id="offlineSchedule" class="text-black"></strong></p>
+                <p><span class="text-gray-500 font-medium text-sm block">Giờ học:</span> <strong id="offlineTime" class="text-black"></strong></p>
+                <p><span class="text-gray-500 font-medium text-sm block">Địa điểm:</span> <strong class="text-black">Quảng Yên, Quảng Ninh</strong></p>
+            </div>
+            <button onclick="closeModal('offlineInfoModal')" class="w-full bg-[#1B2A24] text-white rounded-xl py-3 font-bold hover:bg-black transition-colors shadow-sm">Đã hiểu</button>
+        </div>
+    </div>
+    
+    
+    <!-- Modal Video Course CHUẨN F8 -->
+    <div id="videoCourseModal" class="hidden fixed inset-0 z-[100] bg-[#0B0C0F] flex-col md:flex-row modal-content">
+        <button onclick="closeModal('videoCourseModal'); stopVideo();" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl z-50">✕</button>
+        <div class="flex-1 flex flex-col h-full bg-black relative">
+            <div class="p-4 border-b border-gray-800 flex items-center justify-between"><h3 id="videoTopTitle" class="text-white font-bold text-lg">Khóa học</h3></div>
+            <div class="relative w-full aspect-video bg-black flex-shrink-0"><video id="mainVideo" class="w-full h-full object-contain" controls controlsList="nodownload"></video></div>
+            <div class="p-6 overflow-y-auto flex-1 bg-[#0B0C0F] relative">
+                
+                <!-- Wrapper kiểm tra / Quiz -->
+                <div id="quizSectionWrapper" class="hidden bg-[#1C1D1F] p-6 rounded-2xl border border-gray-800">
+                    <div class="flex justify-between items-center mb-6"><h3 class="text-lg font-bold text-white">Kiểm tra kiến thức</h3><span id="quizProgressText" class="text-sm font-medium text-[#F05123] bg-[#F05123]/10 px-3 py-1 rounded-full">Câu hỏi</span></div>
+                    <div id="quizQuestionText" class="text-white text-lg mb-6 font-medium leading-relaxed"></div>
+                    <div id="quizOptionsContainer" class="space-y-3"></div>
+                </div>
+
+                <!-- Wrapper Nội dung Học tập (Tabs) -->
+                <div id="learningTabsSection">
+                    <h2 id="videoTitle" class="text-2xl font-bold text-white mb-4">Đang tải...</h2>
+                    
+                    <!-- Tabs điều hướng -->
+                    <div class="flex gap-6 border-b border-gray-800 mb-6">
+                        <button onclick="switchVideoTab('overview')" id="tab-overview" class="video-tab-btn pb-3 border-b-2 border-[#F05123] text-white font-medium text-sm transition-colors">Tổng quan</button>
+                        <button onclick="switchVideoTab('qa')" id="tab-qa" class="video-tab-btn pb-3 border-b-2 border-transparent text-gray-400 hover:text-white font-medium text-sm transition-colors">Hỏi đáp</button>
+                        <button onclick="switchVideoTab('notes')" id="tab-notes" class="video-tab-btn pb-3 border-b-2 border-transparent text-gray-400 hover:text-white font-medium text-sm transition-colors">Ghi chú</button>
+                    </div>
+
+                    <!-- Nội dung Tổng quan -->
+                    <div id="content-overview" class="video-tab-content block">
+                        <p id="videoDesc" class="text-gray-300 text-sm leading-relaxed mb-6"></p>
+                        <div class="flex gap-4 pt-6 border-t border-gray-800 mt-8">
+                            <button onclick="prevLesson()" id="btnPrevLesson" class="px-5 py-2.5 bg-gray-800 text-white rounded-xl text-sm font-medium hover:bg-gray-700 disabled:opacity-50">⬅ Bài trước</button>
+                            <button onclick="nextLesson()" id="btnNextLesson" class="px-5 py-2.5 bg-[#F05123] text-white rounded-xl text-sm font-bold hover:bg-[#d8481e] disabled:opacity-50">Bài tiếp theo ➡</button>
+                        </div>
+                    </div>
+
+                    <!-- Nội dung Hỏi đáp -->
+                    <div id="content-qa" class="video-tab-content hidden">
+                        <div class="flex gap-3 mb-8">
+                            <div class="w-10 h-10 rounded-full bg-gray-700 border border-gray-600 flex items-center justify-center text-white font-bold shrink-0 overflow-hidden" id="qaUserAvatar"></div>
+                            <div class="flex-1">
+                                <textarea id="qaInput" rows="2" class="w-full bg-transparent border-b border-gray-600 text-white pb-2 focus:outline-none focus:border-[#F05123] text-sm resize-none" placeholder="Thêm câu hỏi (Nhấn Enter để gửi)"></textarea>
+                            </div>
+                        </div>
+                        <div id="qaList" class="space-y-6"></div>
+                    </div>
+
+                    <!-- Nội dung Ghi chú -->
+                    <div id="content-notes" class="video-tab-content hidden">
+                        <div class="bg-[#1C1D1F] p-4 rounded-xl mb-8 flex flex-col items-start border border-gray-800">
+                            <div class="flex items-center gap-3 w-full">
+                                <span class="bg-[#F05123] text-white text-xs font-bold px-2 py-1 rounded" id="currentVideoTimeBadge">00:00</span>
+                                <input type="text" id="noteInput" class="flex-1 bg-transparent border-none text-white text-sm focus:outline-none" placeholder="Thêm ghi chú tại thời gian này (Nhấn Enter để lưu)">
+                            </div>
+                        </div>
+                        <div id="notesList" class="space-y-3"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="w-full md:w-80 lg:w-96 bg-[#1C1D1F] h-full flex flex-col border-l border-gray-800">
+            <div class="p-4 border-b border-gray-800 flex items-center justify-between"><h3 class="text-white font-bold">Nội dung bài học</h3></div>
+            <div id="lessonList" class="flex-1 overflow-y-auto custom-scrollbar bg-[#0B0C0F]"></div>
+        </div>
+    </div>
+    
+    <div id="toast-container"></div>
+    <script src="js/database.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

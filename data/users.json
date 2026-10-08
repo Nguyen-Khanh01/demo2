@@ -1,0 +1,15 @@
+[
+    {
+        "id": 1,
+        "name": "Admin (Thắng)",
+        "email": "admin@gmail.com",
+        "password": "123",
+        "avatar": "",
+        "bio": "Quản trị viên hệ thống TQ",
+        "courses": ["Video HSK 1 Toàn tập"],
+        "progress": { "Video HSK 1 Toàn tập": 1 },
+        "studyStreak": 5,
+        "role": "admin",
+        "status": "active"
+    }
+]
